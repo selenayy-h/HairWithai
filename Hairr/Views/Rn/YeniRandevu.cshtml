@@ -1,0 +1,99 @@
+﻿@model Hairr.Models.Appointment
+@{
+    ViewData["Title"] = "Yeni Randevu";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+
+<style>
+    /* Sayfa Genel Görünüm */
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin: 20px 0;
+    }
+
+    form {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+        form div {
+            margin: 15px 0;
+        }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select {
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container">
+    <h2>Yeni Randevu Ekle</h2>
+    @if (ViewBag.BasariMesaji != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.BasariMesaji
+        </div>
+    }
+
+    <form asp-action="YeniRandevu" method="post">
+        <div>
+            <label for="CustomerName">Müşteri Adı:</label>
+            <input asp-for="CustomerName" />
+        </div>
+        <div>
+            <label for="AppointmentDate">Randevu Tarihi:</label>
+            <input asp-for="AppointmentDate" type="datetime-local" />
+        </div>
+        <div>
+            <label for="IslemId">İşlem Seç:</label>
+            <select asp-for="IslemId" asp-items="ViewBag.IslemListesi as List<SelectListItem>"></select>
+        </div>
+        <div>
+            <label for="PersonelId">Personel Seç:</label>
+            <select asp-for="PersonelId" asp-items="ViewBag.PersonelListesi as List<SelectListItem>"></select>
+        </div>
+        <div>
+            <input type="submit" value="Randevu Ekle" />
+        </div>
+    </form>
+</div>

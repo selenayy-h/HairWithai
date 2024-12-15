@@ -1,0 +1,41 @@
+﻿@model List<Hairr.Models.Appointment>
+@{
+    ViewData["Title"] = "Randevu Listesi";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+<h1>Randevu Listesi</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Müşteri Adı</th>
+            <th>Randevu Tarihi</th>
+            <th>İşlem</th>
+            <th>Personel</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.CustomerName</td>
+                <td>@item.AppointmentDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Islem?.IslemAdi</td>
+                <td>@item.Personel?.Ad @item.Personel?.Soyad</td>
+                <td>@item.Status</td>
+                <td>
+                    <form method="post" asp-action="UpdateStatus" asp-controller="Admin">
+                        <input type="hidden" name="id" value="@item.ID" />
+                        <button type="submit" name="status" value="Onaylandı" class="btn btn-success btn-sm">Onayla</button>
+                        <button type="submit" name="status" value="Reddedildi" class="btn btn-danger btn-sm">Reddet</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

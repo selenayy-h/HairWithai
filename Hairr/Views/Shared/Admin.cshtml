@@ -1,0 +1,64 @@
+﻿
+@{
+}
+@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Navbar bağlantılarının varsayılan rengi */
+        .navbar-inverse .navbar-nav > li > a {
+            color: white !important; /* Beyaz renk */
+            transition: color 0.3s ease !important; /* Renk değişiminde yumuşak geçiş efekti */
+        }
+
+            /* Navbar bağlantılarının üzerine gelindiğinde (hover) */
+            .navbar-inverse .navbar-nav > li > a:hover {
+                color: #d4ac0d !important; /* Koyu sarı renk */
+                text-decoration: none !important; /* Alt çizgi olmaması için */
+            }
+
+    </style>
+
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Selen HairDress</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/Man/Index/">Ladies </a></li>
+                @*      <li><a href="/api/Meet/CreateAppointment/">Randevu Al</a></li> *@
+                <li><a href="/Admin/ApproveAppointments/">Admin Onay </a></li>
+                <li><a href="/Login/LogOut/">ÇIKIŞ </a></li>
+                <!-- Randevu Al iyem,çin bir button kullanıyoruz -->
+          
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- buradaki alan layouta bağlu olarak gelen sayfaların içeriğini oluşturucak-
+
+            üst taraflar sabit kalsı her sayfada  ama ben buraları değişsin  -->
+        @RenderBody()
+    </div>
+
+</body>
+</html>
+

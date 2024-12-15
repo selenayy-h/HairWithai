@@ -1,0 +1,28 @@
+﻿@model List<Hairr.Models.Appointment>
+@{
+    ViewData["Title"] = "RandevuListesi";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Müşteri Adı</th>
+            <th>Randevu Tarihi</th>
+            <th>İşlem</th>
+            <th>Personel</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var randevu in Model)
+        {
+            <tr>
+                <td>@randevu.CustomerName</td>
+                <td>@randevu.AppointmentDate.ToString("g")</td>
+                <td>@randevu.Islem.IslemAdi</td>
+                <td>@randevu.Personel.Ad @randevu.Personel.Soyad</td>
+            </tr>
+        }
+    </tbody>
+</table>

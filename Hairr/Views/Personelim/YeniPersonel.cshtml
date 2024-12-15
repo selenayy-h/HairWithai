@@ -1,0 +1,50 @@
+﻿@model Hairr.Models.Personel
+@{
+    ViewData["Title"] = "YeniPersonel";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<h1>YeniPersonel</h1>
+
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">
+        <i class="fas fa-user-plus"></i> Yeni Personel Ekle
+    </h2>
+
+    <form class="form-group shadow-sm p-4 bg-light rounded" method="post">
+
+        <!-- Personel Adı -->
+        <div class="mb-3">
+            <label for="Ad" class="form-label"><b>Personel Adı</b></label>
+            @Html.TextBoxFor(x => x.Ad, new { @class = "form-control", placeholder = "Personel Adını Girin" })
+        </div>
+
+        <!-- Personel Soyadı -->
+        <div class="mb-3">
+            <label for="Soyad" class="form-label"><b>Personel Soyadı</b></label>
+            @Html.TextBoxFor(x => x.Soyad, new { @class = "form-control", placeholder = "Personel Soyadını Girin" })
+        </div>
+
+        <!-- Personel Şehri -->
+        <div class="mb-3">
+            <label for="Sehir" class="form-label"><b>Personel Şehri</b></label>
+            @Html.TextBoxFor(x => x.Sehir, new { @class = "form-control", placeholder = "Personelin Şehrini Girin" })
+        </div>
+
+        <!-- İşlem Uzmanlığı Dropdown -->
+        <div class="mb-3">
+            <label for="IslemId" class="form-label"><b>İşlem Uzmanlığı</b></label>
+            @Html.DropDownListFor(x => x.IslemId,
+                     (List<SelectListItem>)ViewBag.islemUzmanliklari,
+                     "-- Seçiniz --", new { @class = "form-control" })
+        </div>
+
+        <!-- Submit Butonu -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-save"></i> Personel Ekle
+            </button>
+        </div>
+    </form>
+</div>

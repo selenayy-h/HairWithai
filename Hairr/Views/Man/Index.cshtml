@@ -1,0 +1,60 @@
+﻿@using Hairr.Models
+@model IEnumerable<dynamic>
+
+   
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>İşlem</th>
+            <th>Süre</th>
+            <th>Ücret</th>
+            <th>Personellerimiz</th>
+            <th>Randevu oluştur</th>
+            <th>Randevu Durumu</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.ID</td>
+                <td>@x.IslemAdi</td>
+                <td>@x.Time</td>
+                <td>@x.Price</td>
+
+                <td>
+                    <a href="/Man/PersonelDetay/@x.ID"
+                       class="btn btn-primary"
+                       style="background-color: #d4ac0d; color: black; border-color: #b38b00;">
+                        Detay
+                    </a>
+                </td>
+                <td>
+                    <a href="/Man/RandevuOlustur/@x.ID"
+                       class="btn btn-success"
+                       style="background-color: #d4ac0d; color: black; border-color: #b38b00;">
+                        Randevu oluştur
+                    </a>
+                </td>
+                <td>
+                    @if (x.Appointments != null && x.Appointments.Any())
+                    {
+                        <span>@x.Appointments.FirstOrDefault()?.Status ?? "Durum Yok"</span>
+                    }
+                    else
+                    {
+                        <span>Henüz Randevu Yok</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

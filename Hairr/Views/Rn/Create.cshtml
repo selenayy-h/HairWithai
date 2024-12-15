@@ -1,0 +1,45 @@
+﻿@model Hairr.Models.Appointment
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+<h1>Create</h1>
+
+
+<h2>Randevu Oluştur</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Müşteri Adı</label>
+        <input asp-for="CustomerName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Randevu Tarihi</label>
+        <input asp-for="AppointmentDate" type="datetime-local" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Personel</label>
+        <select asp-for="PersonelId" class="form-control" asp-items="@(new SelectList(ViewBag.Employees, "PersonelId", "Ad"))"></select>
+    </div>
+
+    <div class="form-group">
+        <label>İşlem</label>
+        <select asp-for="IslemId" class="form-control" asp-items="@(new SelectList(ViewBag.Services, "ID", "IslemAdi"))"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Randevu Kaydet</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+

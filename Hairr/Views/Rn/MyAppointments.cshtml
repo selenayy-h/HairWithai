@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Hairr.Models.Appointment>
+
+@{
+    ViewData["Title"] = "MyAppointments";
+    Layout = "~/Views/Shared/Test.cshtml";
+}
+
+
+
+
+<h2>Randevularım</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>İşlem</th>
+            <th>Tarih</th>
+            <th>Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Islem?.IslemAdi</td>
+                <td>@item.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@item.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
