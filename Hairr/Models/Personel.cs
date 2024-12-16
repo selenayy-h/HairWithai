@@ -16,6 +16,16 @@ namespace Hairr.Models
 
         [Required]
         public string Sehir { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Uygun günler alanı zorunludur.")]
+        public string UygunlukGunler { get; set; } = string.Empty;
+        // Örneğin: "Pazartesi,Salı,Çarşamba"
+
+        [Required(ErrorMessage = "Uygunluk başlangıç saati zorunludur.")]
+        public TimeSpan UygunlukBaslangic { get; set; } // Örneğin: 09:00
+
+        [Required(ErrorMessage = "Uygunluk bitiş saati zorunludur.")]
+        public TimeSpan UygunlukBitis { get; set; } // Örneğin: 18:00
+
 
         [Required]
         [ForeignKey("Islem")]
