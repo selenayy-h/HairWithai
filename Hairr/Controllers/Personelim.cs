@@ -34,10 +34,21 @@ namespace Hairr.Controllers
             return View();
         }
 
-        // POST: YeniPersonel
         [HttpPost]
         public IActionResult YeniPersonel(Personel p)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                TempData["ErrorMessage"] = "Hata: " + string.Join(", ", errors);
+
+                // İşlem uzmanlığı listesini tekrar doldur
+                ViewBag.islemUzmanliklari = c.Islems
+                    .Select(x => new SelectListItem { Text = x.IslemAdi, Value = x.ID.ToString() }).ToList();
+
+                return View(p);
+            }
+
             // İşlem uzmanlığı verisini veritabanından çek
             var islem = c.Islems.FirstOrDefault(x => x.ID == p.IslemId);
             if (islem != null)
@@ -49,21 +60,23 @@ namespace Hairr.Controllers
             c.Personels.Add(p);
             c.SaveChanges();
 
+            TempData["SuccessMessage"] = "Personel başarıyla eklendi.";
             return RedirectToAction("Index");
         }
 
-
-        // Personel Silme
         public IActionResult PersonelSil(int id)
         {
-            var dep = c.Personels.Find(id);
-            if (dep != null)
+            var personel = c.Personels.Find(id);
+
+            if (personel != null)
             {
-                c.Personels.Remove(dep);
-                c.SaveChanges();
+                c.Personels.Remove(personel);
+                c.SaveChanges(); // İlişkili tüm veriler otomatik olarak silinecek
             }
+
             return RedirectToAction("Index");
         }
+
 
         // Personel Güncelleme Sayfası (GET)
         public IActionResult PersonelGetir(int id)

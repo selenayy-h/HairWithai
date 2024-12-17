@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/Admin.cshtml";
 }
 
-<h1>YeniPersonel</h1>
-
 
 <div class="container mt-4">
     <h2 class="text-center text-primary mb-4">
@@ -38,6 +36,24 @@
             @Html.DropDownListFor(x => x.IslemId,
                      (List<SelectListItem>)ViewBag.islemUzmanliklari,
                      "-- Seçiniz --", new { @class = "form-control" })
+        </div>
+
+        <!-- Uygunluk Günleri -->
+        <div class="mb-3">
+            <label for="UygunlukGunler" class="form-label"><b>Uygun Günler</b></label>
+            @Html.TextBoxFor(x => x.UygunlukGunler, new { @class = "form-control", placeholder = "Örnek: Pazartesi,Salı,Çarşamba" })
+        </div>
+
+        <!-- Uygunluk Başlangıç Saati -->
+        <div class="mb-3">
+            <label for="UygunlukBaslangic" class="form-label"><b>Başlangıç Saati</b></label>
+            @Html.TextBoxFor(x => x.UygunlukBaslangic, new { @class = "form-control", type = "time" })
+        </div>
+
+        <!-- Uygunluk Bitiş Saati -->
+        <div class="mb-3">
+            <label for="UygunlukBitis" class="form-label"><b>Bitiş Saati</b></label>
+            @Html.TextBoxFor(x => x.UygunlukBitis, new { @class = "form-control", type = "time" })
         </div>
 
         <!-- Submit Butonu -->
