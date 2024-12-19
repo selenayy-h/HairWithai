@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Hairr.Models;
 
 namespace Hairr.Models
 {
@@ -26,6 +27,11 @@ namespace Hairr.Models
 
         [Required]
         public string Status { get; set; } = "Beklemede";
+
+        [NotMapped]
+        public DateTime AppointmentEndDate => AppointmentDate.AddMinutes(Islem.Time);
     }
 
 }
+//Appointment'ın Amacı: Appointment (Randevu) sınıfı, belirli bir tarihte, belirli bir personel ile yapılan bir randevuyu temsil eder. Randevu oluşturma işlemi sırasında personelin uygun gün ve saatlerde olup olmadığı kontrol edilir,
+//    ancak bu bilgi randevunun kendisinde saklanmaz.

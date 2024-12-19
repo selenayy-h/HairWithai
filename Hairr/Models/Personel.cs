@@ -19,10 +19,13 @@ namespace Hairr.Models
 
         [Required]
         [ForeignKey("Islem")]
+
         public int IslemId { get; set; }
 
         public Islem Islem { get; set; }
         public IList<Appointment> Appointments { get; set; } = new List<Appointment>();
+        // Yeni eklenen uygunluk günleri koleksiyonu
+    
     }
 
 }

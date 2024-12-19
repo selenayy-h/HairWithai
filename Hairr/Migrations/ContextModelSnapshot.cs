@@ -134,6 +134,27 @@ namespace Hairr.Migrations
                     b.ToTable("Personels");
                 });
 
+            modelBuilder.Entity("Hairr.Models.PersonelUygunlukGun", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Gun")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonelId");
+
+                    b.ToTable("PersonelUygunlukGunler");
+                });
+
             modelBuilder.Entity("Hairr.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -197,6 +218,17 @@ namespace Hairr.Migrations
                     b.Navigation("Islem");
                 });
 
+            modelBuilder.Entity("Hairr.Models.PersonelUygunlukGun", b =>
+                {
+                    b.HasOne("Hairr.Models.Personel", "Personel")
+                        .WithMany("UygunlukGunler")
+                        .HasForeignKey("PersonelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Personel");
+                });
+
             modelBuilder.Entity("Hairr.Models.Islem", b =>
                 {
                     b.Navigation("Appointments");
@@ -207,6 +239,8 @@ namespace Hairr.Migrations
             modelBuilder.Entity("Hairr.Models.Personel", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("UygunlukGunler");
                 });
 #pragma warning restore 612, 618
         }
