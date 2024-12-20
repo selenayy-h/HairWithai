@@ -4,16 +4,13 @@
     Layout = "~/Views/Shared/Admin.cshtml";
 }
 
-<h1>YeniPersonel</h1>
-
+<h1>Yeni Personel Ekle</h1>
 
 <div class="container mt-4">
     <h2 class="text-center text-primary mb-4">
         <i class="fas fa-user-plus"></i> Yeni Personel Ekle
     </h2>
-
     <form class="form-group shadow-sm p-4 bg-light rounded" method="post">
-
         <!-- Personel Adı -->
         <div class="mb-3">
             <label for="Ad" class="form-label"><b>Personel Adı</b></label>
@@ -40,6 +37,30 @@
                      "-- Seçiniz --", new { @class = "form-control" })
         </div>
 
+        <!-- Çalışma Saatleri -->
+        <div id="calismaSaatleriContainer" class="mb-3">
+            <label class="form-label"><b>Çalışma Saatleri</b></label>
+            <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="CalismaSaatis[0].Gun" placeholder="Gün (Örn: Pazartesi)" required />
+                </div>
+                <div class="col-md-3">
+                    <input type="time" class="form-control" name="CalismaSaatis[0].BaslangicSaati" required />
+                </div>
+                <div class="col-md-3">
+                    <input type="time" class="form-control" name="CalismaSaatis[0].BitisSaati" required />
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-danger removeCalismaSaati">Sil</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yeni Çalışma Saati Ekle Butonu -->
+        <div class="text-center mb-3">
+            <button type="button" id="addCalismaSaati" class="btn btn-primary btn-sm">Yeni Çalışma Saati Ekle</button>
+        </div>
+
         <!-- Submit Butonu -->
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-success btn-lg">
@@ -48,3 +69,36 @@
         </div>
     </form>
 </div>
+
+<script>
+    let calismaSaatiIndex = 1;
+
+    document.getElementById("addCalismaSaati").addEventListener("click", function () {
+        const container = document.getElementById("calismaSaatleriContainer");
+
+        const row = document.createElement("div");
+        row.className = "row g-3 align-items-center mt-2";
+        row.innerHTML = `
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" name="CalismaSaatis[${calismaSaatiIndex}].Gun" placeholder="Gün (Örn: Pazartesi)" required />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="time" class="form-control" name="CalismaSaatis[${calismaSaatiIndex}].BaslangicSaati" required />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="time" class="form-control" name="CalismaSaatis[${calismaSaatiIndex}].BitisSaati" required />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger removeCalismaSaati">Sil</button>
+                    </div>
+                `;
+
+        container.appendChild(row);
+        calismaSaatiIndex++;
+
+        // Silme işlemi
+        row.querySelector(".removeCalismaSaati").addEventListener("click", function () {
+            row.remove();
+        });
+    });
+</script>

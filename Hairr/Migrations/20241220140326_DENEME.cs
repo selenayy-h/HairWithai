@@ -1,33 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Hairr.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPersonelUygunlukGun : Migration
+    public partial class DENEME : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "UygunlukGunler",
-                table: "Personels");
-
             migrationBuilder.CreateTable(
-                name: "PersonelUygunlukGunler",
+                name: "CalismaSaatis",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Gun = table.Column<int>(type: "int", nullable: false),
-                    PersonelId = table.Column<int>(type: "int", nullable: false)
+                    PersonelId = table.Column<int>(type: "int", nullable: false),
+                    Gun = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BaslangicSaati = table.Column<TimeSpan>(type: "time", nullable: false),
+                    BitisSaati = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersonelUygunlukGunler", x => x.Id);
+                    table.PrimaryKey("PK_CalismaSaatis", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PersonelUygunlukGunler_Personels_PersonelId",
+                        name: "FK_CalismaSaatis_Personels_PersonelId",
                         column: x => x.PersonelId,
                         principalTable: "Personels",
                         principalColumn: "PersonelId",
@@ -35,8 +34,8 @@ namespace Hairr.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonelUygunlukGunler_PersonelId",
-                table: "PersonelUygunlukGunler",
+                name: "IX_CalismaSaatis_PersonelId",
+                table: "CalismaSaatis",
                 column: "PersonelId");
         }
 
@@ -44,14 +43,7 @@ namespace Hairr.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PersonelUygunlukGunler");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UygunlukGunler",
-                table: "Personels",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                name: "CalismaSaatis");
         }
     }
 }

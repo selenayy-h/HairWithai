@@ -6,100 +6,170 @@ using Hairr.Models;
 
 namespace Hairr.Controllers
 {
-    [Authorize(Roles = "A")] // Tüm Controller için sadece "A" rolü erişebilir
+    [Authorize(Roles = "A")] // Sadece "A" rolü erişebilir
     public class PersonelimController : Controller
     {
-        Context c = new Context();
+        private readonly Context _context = new Context();
 
         // Personel Listesi: Tüm personelleri görüntüler
         public IActionResult Index()
         {
-            var degerler = c.Personels.Include(x => x.Islem).ToList();
-            return View(degerler);
+            var personeller = _context.Personels
+                .Include(p => p.CalismaSaatis) // Çalışma saatlerini dahil et
+                .Include(p => p.Islem) // İşlem uzmanlığını dahil et
+                .ToList();
+
+            return View(personeller);
         }
 
         // Yeni Personel Ekleme Sayfası (GET)
-        // GET: YeniPersonel
         [HttpGet]
         public IActionResult YeniPersonel()
         {
-            // DropdownList için veriyi doldur
-            ViewBag.islemUzmanliklari = c.Islems
+            // İşlem Uzmanlıkları için DropdownList verisini doldur
+            ViewBag.islemUzmanliklari = _context.Islems
                 .Select(x => new SelectListItem
                 {
                     Text = x.IslemAdi,
                     Value = x.ID.ToString()
                 }).ToList();
 
-            return View();
+            return View(new Personel());
         }
 
-        // POST: YeniPersonel
         [HttpPost]
-        public IActionResult YeniPersonel(Personel p)
+        public IActionResult YeniPersonel(Personel personel)
         {
-            // İşlem uzmanlığı verisini veritabanından çek
-            var islem = c.Islems.FirstOrDefault(x => x.ID == p.IslemId);
-            if (islem != null)
+            // Gelen verileri kontrol etmek için
+            Console.WriteLine($"Ad: {personel.Ad}, Soyad: {personel.Soyad}, Sehir: {personel.Sehir}, IslemId: {personel.IslemId}");
+
+            if (personel.CalismaSaatis != null)
             {
-                p.Islem = islem;
+                foreach (var calismaSaati in personel.CalismaSaatis)
+                {
+                    Console.WriteLine($"Gun: {calismaSaati.Gun}, Baslangic: {calismaSaati.BaslangicSaati}, Bitis: {calismaSaati.BitisSaati}");
+                }
             }
 
-            // Yeni personel ekle
-            c.Personels.Add(p);
-            c.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _context.Personels.Add(personel);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return RedirectToAction("Index");
+            // Hata varsa dönen mesajları yazdırın
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine($"Hata: {error.ErrorMessage}");
+            }
+
+            return View(personel);
         }
-
 
         // Personel Silme
         public IActionResult PersonelSil(int id)
         {
-            var dep = c.Personels.Find(id);
-            if (dep != null)
+            var personel = _context.Personels
+                .Include(p => p.CalismaSaatis)
+                .FirstOrDefault(p => p.PersonelId == id);
+
+            if (personel != null)
             {
-                c.Personels.Remove(dep);
-                c.SaveChanges();
+                _context.Personels.Remove(personel);
+                _context.SaveChanges();
             }
             return RedirectToAction("Index");
         }
 
         // Personel Güncelleme Sayfası (GET)
+        [HttpGet]
         public IActionResult PersonelGetir(int id)
         {
-            var personel = c.Personels.Find(id);
+            var personel = _context.Personels
+                .Include(p => p.CalismaSaatis)
+                .FirstOrDefault(p => p.PersonelId == id);
+
             if (personel == null)
             {
                 return NotFound();
             }
 
-            List<SelectListItem> degerler = (from x in c.Islems.ToList()
-                                             select new SelectListItem
-                                             {
-                                                 Text = x.IslemAdi,
-                                                 Value = x.ID.ToString()
-                                             }).ToList();
-            ViewBag.dgr = degerler;
+            // Dropdown verisi
+            ViewBag.islemUzmanliklari = _context.Islems
+                .Select(x => new SelectListItem
+                {
+                    Text = x.IslemAdi,
+                    Value = x.ID.ToString()
+                }).ToList();
 
-            return View("PersonelGetir", personel);
+            return View(personel);
         }
 
         // Personel Güncelleme İşlemi (POST)
         [HttpPost]
-        public IActionResult PersonelGuncelle(Personel p)
+        public IActionResult PersonelGuncelle(Personel personel)
         {
-            var personel = c.Personels.Find(p.PersonelId);
-            if (personel != null)
-            {
-                personel.Ad = p.Ad;
-                personel.Soyad = p.Soyad;
-                personel.Sehir = p.Sehir;
-                personel.IslemId = p.IslemId;
+            var existingPersonel = _context.Personels
+                .Include(p => p.CalismaSaatis)
+                .FirstOrDefault(p => p.PersonelId == personel.PersonelId);
 
-                c.SaveChanges();
+            if (existingPersonel != null)
+            {
+                existingPersonel.Ad = personel.Ad;
+                existingPersonel.Soyad = personel.Soyad;
+                existingPersonel.Sehir = personel.Sehir;
+                existingPersonel.IslemId = personel.IslemId;
+
+                // Çalışma saatlerini güncelle
+                existingPersonel.CalismaSaatis.Clear();
+                if (personel.CalismaSaatis != null && personel.CalismaSaatis.Any())
+                {
+                    foreach (var calismaSaati in personel.CalismaSaatis)
+                    {
+                        existingPersonel.CalismaSaatis.Add(calismaSaati);
+                    }
+                }
+
+                _context.SaveChanges();
             }
+
             return RedirectToAction("Index");
+        }
+
+        // Çalışma Saatlerini Listele
+        public IActionResult CalismaSaatleri(int personelId)
+        {
+            var personel = _context.Personels
+                .Include(p => p.CalismaSaatis)
+                .FirstOrDefault(p => p.PersonelId == personelId);
+
+            if (personel == null)
+                return NotFound();
+
+            return View(personel);
+        }
+
+        // Çalışma Saatleri Ekleme Sayfası (GET)
+        [HttpGet]
+        public IActionResult YeniCalismaSaati(int personelId)
+        {
+            ViewBag.PersonelId = personelId;
+            return View(new CalismaSaati());
+        }
+
+        // Çalışma Saatleri Ekleme (POST)
+        [HttpPost]
+        public IActionResult YeniCalismaSaati(CalismaSaati calismaSaati)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.CalismaSaatis.Add(calismaSaati);
+                _context.SaveChanges();
+                return RedirectToAction("CalismaSaatleri", new { personelId = calismaSaati.PersonelId });
+            }
+
+            return View(calismaSaati);
         }
     }
 }

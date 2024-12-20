@@ -8,7 +8,7 @@ namespace Hairr.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=LAPTOP-ACDH94DG\\SQLEXPRESS01;database=SELENAY;integrated security=true;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("server=LAPTOP-ACDH94DG\\SQLEXPRESS;database=SELENAY1;integrated security=true;TrustServerCertificate=True;");
         }
 
         public DbSet<Personel> Personels { get; set; }
@@ -20,6 +20,8 @@ namespace Hairr.Models
         public DbSet<Admin> Admins { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<CalismaSaati> CalismaSaatis { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -36,6 +38,12 @@ namespace Hairr.Models
                 .WithMany(i => i.Appointments) // Appointments ile ilişkilendirildi
                 .HasForeignKey(a => a.IslemId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<CalismaSaati>()
+    .HasOne(cs => cs.Personel)
+    .WithMany(p => p.CalismaSaatis)
+    .HasForeignKey(cs => cs.PersonelId);
 
             base.OnModelCreating(modelBuilder);
         }

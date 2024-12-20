@@ -25,7 +25,8 @@ namespace Hairr.Models
         public Islem Islem { get; set; }
         public IList<Appointment> Appointments { get; set; } = new List<Appointment>();
         // Yeni eklenen uygunluk günleri koleksiyonu
-    
+        // Çalışma saatlerini tutacak koleksiyon
+        public ICollection<CalismaSaati> CalismaSaatis { get; set; } = new List<CalismaSaati>();
     }
 
 }

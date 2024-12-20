@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hairr.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241218103018_AddPersonelUygunlukGun")]
-    partial class AddPersonelUygunlukGun
+    [Migration("20241220121606_selenayduzgun")]
+    partial class selenayduzgun
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,38 +130,11 @@ namespace Hairr.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("UygunlukBaslangic")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("UygunlukBitis")
-                        .HasColumnType("time");
-
                     b.HasKey("PersonelId");
 
                     b.HasIndex("IslemId");
 
                     b.ToTable("Personels");
-                });
-
-            modelBuilder.Entity("Hairr.Models.PersonelUygunlukGun", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Gun")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonelId");
-
-                    b.ToTable("PersonelUygunlukGunler");
                 });
 
             modelBuilder.Entity("Hairr.Models.User", b =>
@@ -227,17 +200,6 @@ namespace Hairr.Migrations
                     b.Navigation("Islem");
                 });
 
-            modelBuilder.Entity("Hairr.Models.PersonelUygunlukGun", b =>
-                {
-                    b.HasOne("Hairr.Models.Personel", "Personel")
-                        .WithMany("UygunlukGunler")
-                        .HasForeignKey("PersonelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Personel");
-                });
-
             modelBuilder.Entity("Hairr.Models.Islem", b =>
                 {
                     b.Navigation("Appointments");
@@ -248,8 +210,6 @@ namespace Hairr.Migrations
             modelBuilder.Entity("Hairr.Models.Personel", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("UygunlukGunler");
                 });
 #pragma warning restore 612, 618
         }

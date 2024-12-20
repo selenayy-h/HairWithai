@@ -4,6 +4,7 @@ using Hairr.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hairr.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20241220140326_DENEME")]
+    partial class DENEME
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,7 +201,7 @@ namespace Hairr.Migrations
             modelBuilder.Entity("CalismaSaati", b =>
                 {
                     b.HasOne("Hairr.Models.Personel", "Personel")
-                        .WithMany("CalismaSaatis")
+                        .WithMany()
                         .HasForeignKey("PersonelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -246,8 +249,6 @@ namespace Hairr.Migrations
             modelBuilder.Entity("Hairr.Models.Personel", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("CalismaSaatis");
                 });
 #pragma warning restore 612, 618
         }
