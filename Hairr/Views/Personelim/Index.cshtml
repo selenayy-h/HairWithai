@@ -1,55 +1,51 @@
-﻿@model List<Hairr.Models.Personel>
+﻿@model IEnumerable<Hairr.Models.Personel>
+
 
 @{
     ViewData["Title"] = "Personel Listesi";
     Layout = "~/Views/Shared/Admin.cshtml";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">Personel Listesi</h2>
 
-    <table class="table table-bordered">
-        <thead>
+<h2>Personel Listesi</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Şehir</th>
+            <th>İşlem</th>
+            <th>Çalışma Günleri ve Saatleri</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var personel in Model)
+        {
             <tr>
-                <th>#</th>
-                <th>Ad</th>
-                <th>Soyad</th>
-                <th>Şehir</th>
-                <th>İşlem</th>
-                <th>Çalışma Saatleri</th>
-                <th>İşlemler</th>
+                <td>@personel.Ad</td>
+                <td>@personel.Soyad</td>
+                <td>@personel.Sehir</td>
+                <td>@personel.Islem?.IslemAdi</td>
+                <td>
+                    <ul>
+                        @foreach (var calismaSaati in personel.CalismaSaatis)
+                        {
+                            <li>@calismaSaati.Gun: @calismaSaati.BaslangicSaati - @calismaSaati.BitisSaati</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a href="@Url.Action("PersonelGetir", "Personelim", new { id = personel.PersonelId })" class="btn btn-warning">Güncelle</a>
+                    <form method="post" action="@Url.Action("PersonelSil", "Personelim")" style="display:inline;">
+                        <input type="hidden" name="id" value="@personel.PersonelId" />
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var personel in Model)
-            {
-                <tr>
-                    <td>@personel.PersonelId</td>
-                    <td>@personel.Ad</td>
-                    <td>@personel.Soyad</td>
-                    <td>@personel.Sehir</td>
-                    <td>@personel.Islem?.IslemAdi</td>
-                    <td>
-                        <ul>
-                            @foreach (var calismaSaati in personel.CalismaSaatis)
-                            {
-                                <li>
-                                    @calismaSaati.Gun:
-                                    @calismaSaati.BaslangicSaati - @calismaSaati.BitisSaati
-                                </li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <a href="/Personelim/PersonelGetir/@personel.PersonelId" class="btn btn-primary btn-sm">Düzenle</a>
-                        <a href="/Personelim/PersonelSil/@personel.PersonelId" class="btn btn-danger btn-sm">Sil</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <!-- Personel Ekle Butonu -->
-    <div class="text-center mt-4">
-        <a href="/Personelim/YeniPersonel" class="btn btn-success btn-lg">Personel Ekle</a>
-    </div>
-</div>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("YeniPersonel", "Personelim")" class="btn btn-primary">Yeni Personel Ekle</a>

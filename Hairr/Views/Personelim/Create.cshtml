@@ -1,10 +1,13 @@
 ﻿@model Hairr.Models.Personel
+
 @{
-    ViewData["Title"] = "YeniPersonel";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/Admin.cshtml";
 }
 
-<form asp-action="YeniPersonel" method="post">
+<h2>Yeni Personel Ekle</h2>
+
+<form asp-action="Create" method="post">
     <div class="form-group">
         <label for="Ad">Ad</label>
         <input type="text" class="form-control" id="Ad" name="Ad" required />
@@ -22,7 +25,7 @@
         <select class="form-control" id="IslemId" name="IslemId" required>
             @foreach (var islem in ViewBag.Islemler)
             {
-                <option value="@islem.Value">@islem.Text</option>
+                <option value="@islem.ID">@islem.IslemAdi</option>
             }
         </select>
     </div>
@@ -53,18 +56,17 @@
         row.className = 'form-row mt-2';
 
         row.innerHTML = `
-                <div class="col">
-                    <input type="text" class="form-control" name="calismaSaatleri[${calismaIndex}].Gun" placeholder="Gün (Örn: Pazartesi)" required />
-                </div>
-                <div class="col">
-                    <input type="time" class="form-control" name="calismaSaatleri[${calismaIndex}].BaslangicSaati" required />
-                </div>
-                <div class="col">
-                    <input type="time" class="form-control" name="calismaSaatleri[${calismaIndex}].BitisSaati" required />
-                </div>
-            `;
+            <div class="col">
+                <input type="text" class="form-control" name="calismaSaatleri[${calismaIndex}].Gun" placeholder="Gün (Örn: Pazartesi)" required />
+            </div>
+            <div class="col">
+                <input type="time" class="form-control" name="calismaSaatleri[${calismaIndex}].BaslangicSaati" required />
+            </div>
+            <div class="col">
+                <input type="time" class="form-control" name="calismaSaatleri[${calismaIndex}].BitisSaati" required />
+            </div>
+        `;
         container.appendChild(row);
         calismaIndex++;
     }
 </script>
-```
