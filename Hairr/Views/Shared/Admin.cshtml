@@ -1,13 +1,4 @@
-﻿
-@{
-}
-@{
-    Layout = null;
-}
-
-
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <style>
@@ -22,18 +13,19 @@
                 color: #d4ac0d !important; /* Koyu sarı renk */
                 text-decoration: none !important; /* Alt çizgi olmaması için */
             }
-
     </style>
 
-    <title>Bootstrap Example</title>
+    <title>@ViewData["Title"] - Selen HairDress</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- 'Styles' bölümünü opsiyonel hale getiriyoruz -->
+    @RenderSection("Styles", required: false)
 </head>
 <body>
-
 
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -41,24 +33,24 @@
                 <a class="navbar-brand" href="#">Selen HairDress</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="/Personelim/Index/">Ladies </a></li>
-                @*      <li><a href="/api/Meet/CreateAppointment/">Randevu Al</a></li> *@
-                <li><a href="/Admin/ApproveAppointments/">Admin Onay </a></li>
-                <li><a href="/Login/LogOut/">ÇIKIŞ </a></li>
-                <!-- Randevu Al iyem,çin bir button kullanıyoruz -->
-          
-
+                <li><a href="/Personelim/Index/">Personeller</a></li>
+                <li><a href="/Islem/Index/">İşlemler</a></li>
+                @* <li><a href="/api/Meet/CreateAppointment/">Randevu Al</a></li> *@
+                <li><a href="/Admin/ApproveAppointments/">Admin Onay</a></li>
+                <li><a href="/Login/LogOut/">ÇIKIŞ</a></li>
+                <!-- Randevu Al işlemi için bir buton kullanıyoruz -->
             </ul>
         </div>
     </nav>
 
     <div class="container">
-        <!-- buradaki alan layouta bağlu olarak gelen sayfaların içeriğini oluşturucak-
-
-            üst taraflar sabit kalsı her sayfada  ama ben buraları değişsin  -->
+        <!-- Bu alan layout'a bağlı olarak gelen sayfaların içeriğini oluşturacak.
+             Üst taraflar sabit kalacak her sayfada ama ben buraları değişsin -->
         @RenderBody()
     </div>
 
+    <!-- 'Scripts' bölümünü opsiyonel hale getiriyoruz -->
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>
-

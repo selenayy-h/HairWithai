@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Hairr.Models.Islem>
+
+@{
+    ViewData["Title"] = "İşlemler";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="YeniIslem" class="btn btn-primary">Yeni İşlem Ekle</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>İşlem Adı</th>
+            <th>Süre (dk)</th>
+            <th>Fiyat (₺)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.IslemAdi</td>
+                <td>@item.Time</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>
+                    <a asp-action="IslemGetir" asp-route-id="@item.ID" class="btn btn-sm btn-warning">Düzenle</a>
+                    <a asp-action="IslemSil" asp-route-id="@item.ID" class="btn btn-sm btn-danger">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
