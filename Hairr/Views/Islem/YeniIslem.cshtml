@@ -1,11 +1,11 @@
 ﻿@model Hairr.Models.Islem
 
 @{
-    ViewData["Title"] = "YeniIslem";
-    Layout = "~/Views/Shared/Admin.cshtml";
+    ViewData["Title"] = "Yeni İşlem Ekle";
+    Layout = "~/Views/Shared/Admin.cshtml"; // Layout dosyanızın doğru olduğundan emin olun
 }
-<h1>@ViewData["Title"]</h1>
 
+<h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-6">
@@ -38,6 +38,7 @@
     </div>
 </div>
 
+<!-- 'Styles' ve 'Scripts' bölümlerini sadece bir kez tanımladığınızdan emin olun -->
 @section Styles {
     <style>
         /* Özel stilleriniz burada */
@@ -54,5 +55,3 @@
         console.log("Yeni İşlem Sayfası Script'i Çalıştı.");
     </script>
 }
-
-@section Scripts { } // Eğer Scripts bölümü tanımlanıyorsa

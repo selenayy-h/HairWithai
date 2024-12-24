@@ -54,19 +54,22 @@ namespace Hairr.Controllers
             return View(islem);
         }
 
-        // POST: Islem/IslemSil/5
-        [HttpPost, ActionName("IslemSil")]
+        // POST: Islem/Delete/5
+        // POST: Islem/Delete/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IslemSilConfirmed(int id)
+        public IActionResult Delete(int id)
         {
             var islem = _context.Islems.Find(id);
             if (islem != null)
             {
                 _context.Islems.Remove(islem);
                 _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return NotFound();
         }
+
 
         // GET: Islem/IslemGetir/5
         [HttpGet]

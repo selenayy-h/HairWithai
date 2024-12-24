@@ -30,7 +30,12 @@
                 <td>@item.Price.ToString("C")</td>
                 <td>
                     <a asp-action="IslemGetir" asp-route-id="@item.ID" class="btn btn-sm btn-warning">Düzenle</a>
-                    <a asp-action="IslemSil" asp-route-id="@item.ID" class="btn btn-sm btn-danger">Sil</a>
+
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@item.ID" />
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bu işlemi silmek istediğinizden emin misiniz?');">Sil</button>
+                    </form>
                 </td>
             </tr>
         }
