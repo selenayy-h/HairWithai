@@ -1,5 +1,6 @@
 ﻿using Hairr.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hairr.Controllers
 {
@@ -12,6 +13,7 @@ namespace Hairr.Controllers
         public IActionResult ApproveAppointments()
         {
             var randevular = c.Appointments
+                .Include(a => a.Islem) // İlişkili Islem verilerini dahil ediyoruz
                 .Where(a => a.Status == "Beklemede")
                 .ToList();
 

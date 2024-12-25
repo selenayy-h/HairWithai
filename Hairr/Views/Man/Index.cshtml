@@ -9,6 +9,13 @@
 }
 
 
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">Hoşgeldin, @User.Identity.Name!</h2>
+        <p class="text-muted">Sistemimize hoş geldiniz.</p>
+    </div>
+
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -17,8 +24,7 @@
             <th>Süre</th>
             <th>Ücret</th>
             <th>Personellerimiz</th>
-            <th>Randevu oluştur</th>
-            <th>Randevu Durumu</th>
+           
         </tr>
     </thead>
     <tbody>
@@ -27,8 +33,8 @@
             <tr>
                 <td>@x.ID</td>
                 <td>@x.IslemAdi</td>
-                <td>@x.Time</td>
-                <td>@x.Price</td>
+                <td>@x.Time dk</td>
+                <td>@x.Price ₺</td>
 
                 <td>
                     <a href="/Man/PersonelDetay/@x.ID"
@@ -37,23 +43,7 @@
                         Detay
                     </a>
                 </td>
-                <td>
-                    <a href="/Man/RandevuOlustur/@x.ID"
-                       class="btn btn-success"
-                       style="background-color: #d4ac0d; color: black; border-color: #b38b00;">
-                        Randevu oluştur
-                    </a>
-                </td>
-                <td>
-                    @if (x.Appointments != null && x.Appointments.Any())
-                    {
-                        <span>@x.Appointments.FirstOrDefault()?.Status ?? "Durum Yok"</span>
-                    }
-                    else
-                    {
-                        <span>Henüz Randevu Yok</span>
-                    }
-                </td>
+              
             </tr>
         }
     </tbody>

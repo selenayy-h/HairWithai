@@ -68,6 +68,10 @@ namespace Hairr.Controllers
         }
 
 
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> LogOut()
         {
