@@ -4,16 +4,13 @@
     ViewData["Title"] = "Randevu Oluştur";
     Layout = "~/Views/Shared/Test.cshtml";
 }
+﻿
 
-<h1>@ViewData["Title"]</h1>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-
-    <!-- Müşteri Adı (Readonly) -->
     <div class="form-group">
         <label>Müşteri Adı</label>
-        <input asp-for="CustomerName" class="form-control" readonly value="@User.Identity.Name" />
+        <input asp-for="CustomerName" class="form-control" />
     </div>
 
     <div class="form-group">
@@ -23,12 +20,12 @@
 
     <div class="form-group">
         <label>Personel</label>
-        <select asp-for="PersonelId" class="form-control" asp-items="ViewBag.Employees"></select>
+        <select asp-for="PersonelId" class="form-control" asp-items="@(new SelectList(ViewBag.Employees, "PersonelId", "Ad"))"></select>
     </div>
 
     <div class="form-group">
         <label>İşlem</label>
-        <select asp-for="IslemId" class="form-control" asp-items="ViewBag.Services"></select>
+        <select asp-for="IslemId" class="form-control" asp-items="@(new SelectList(ViewBag.Services, "ID", "IslemAdi"))"></select>
     </div>
 
     <button type="submit" class="btn btn-primary">Randevu Kaydet</button>
@@ -36,7 +33,7 @@
 
 @if (!ViewData.ModelState.IsValid)
 {
-    <div class="alert alert-danger mt-3">
+    <div class="alert alert-danger">
         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
         {
             <p>@error.ErrorMessage</p>

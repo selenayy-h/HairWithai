@@ -5,12 +5,15 @@
     Layout = "~/Views/Shared/Test.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<!-- Başlık Metnini Ortalamak ve Stil Vermek -->
+<h1 class="text-center" style="font-weight: bold; color: #d4ac0d; text-shadow: 2px 2px #aaa;">
+    Randevularım
+</h1>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
+ 
             <th>İşlem</th>
             <th>Süre</th>
             <th>Ücret</th>
@@ -23,7 +26,7 @@
         @foreach (var randevu in Model)
         {
             <tr>
-                <td>@randevu.ID</td>
+          
                 <td>@randevu.Islem?.IslemAdi</td>
                 <td>@randevu.Islem?.Time dk</td>
                 <td>@randevu.Islem?.Price ₺</td>

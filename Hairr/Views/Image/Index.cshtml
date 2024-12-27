@@ -1,42 +1,156 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Test.cshtml";
 }
 
-
-
-<h1>Hoşgeldiniz!</h1>
-<p>Kuaför Uygulamasına Hoşgeldiniz. Randevu alabilir ve saç modeli önerisi alabilirsiniz.</p>
-
-<h2>Fotoğraf Yükleyerek Saç Modeli Önerisi Al</h2>
-<div class="mt-4">
-    <input type="file" id="imageInput" accept="image/*" />
-    <button id="uploadButton" class="btn btn-secondary mt-2">Fotoğraf Yükle</button>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h2 class="text-center" style="font-weight: bold; color: #d4ac0d; text-shadow: 2px 2px #aaa;">
+            Merhaba, @User.Identity.Name!
+        </h2>
+        <p class="text-muted">Saç modeli önerisi alabilirsiniz</p>
+    </div>
 </div>
-<div id="uploadedImage" style="max-width:200px;" class="mt-4"></div>
 
-<!-- jQuery Kütüphanesi -->
+<div class="mt-4 d-flex flex-column align-items-center">
+    <!-- Fotoğraf Yükleme -->
+    <div class="mb-3 w-100 d-flex align-items-center justify-content-center">
+        <input type="file" id="imageInput" accept="image/*" class="form-control me-2" style="width: auto;" />
+        <button id="uploadButton" class="btn btn-black" disabled>Fotoğraf Yükle</button>
+    </div>
+
+    <!-- Saç Modeli Seçimi -->
+    <div class="mb-3 w-100 d-flex align-items-center justify-content-center">
+        <label for="hairTypeSelect" class="form-label me-2">Saç Tipinizi Seçin:</label>
+        <select id="hairTypeSelect" class="form-select" style="width: auto;">
+            <option value="" disabled selected>Seçiniz</option>
+            <option value="short">Kısa Saç</option>
+            <option value="medium">Orta Uzunlukta Saç</option>
+            <option value="long">Uzun Saç</option>
+            <option value="curly">Kıvırcık Saç</option>
+            <option value="straight">Düz Saç</option>
+            <option value="wavy">Dalgalı Saç</option>
+        </select>
+        <button id="suggestButton" class="btn btn-info ms-3">Bana Öner</button>
+    </div>
+    <p id="suggestedModel" class="text-muted text-center"></p>
+
+    <!-- Saç Rengi Seçimi -->
+    <div class="mb-3 w-100 d-flex align-items-center justify-content-center">
+        <label for="hairColorPicker" class="form-label me-2">Saç Rengi Seçin:</label>
+        <input type="color" id="hairColorPicker" value="#000000" class="form-control" style="width: 50px; height: 40px; padding: 2px;">
+    </div>
+
+    <!-- Yükleniyor Göstergesi -->
+    <div id="loadingIndicator" class="mt-4 text-center" style="display: none;">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="text-muted mt-2">Yükleniyor, lütfen bekleyin...</p>
+    </div>
+
+    <!-- Yüklenen Görsel -->
+    <div id="uploadedImage" style="max-width:200px;" class="mt-4"></div>
+
+    <!-- Filtreler -->
+    <div class="mt-4">
+        <label for="brightnessRange">Parlaklık:</label>
+        <input type="range" id="brightnessRange" min="50" max="150" value="100">
+        <label for="contrastRange" class="ms-3">Kontrast:</label>
+        <input type="range" id="contrastRange" min="50" max="150" value="100">
+    </div>
+
+    <!-- Favorilere Ekle -->
+    <div class="mt-4">
+        <button id="favoriteButton" class="btn btn-success">Favorilere Ekle</button>
+    </div>
+    <div id="favorites" class="mt-4">
+        <h5>Favorilerim</h5>
+        <div id="favoriteList" class="d-flex flex-wrap"></div>
+    </div>
+
+    <!-- Sonuç Karşılaştırması -->
+    <div id="comparisonGallery" class="mt-4">
+        <h5>Sonuç Karşılaştırması</h5>
+        <div id="previousResults" class="d-flex flex-wrap"></div>
+    </div>
+</div>
+
+<style>
+    .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-black:hover {
+            background-color: #555;
+            transform: scale(1.05);
+        }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .form-control {
+        display: inline-block;
+    }
+
+    #hairColorPicker {
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    img.img-thumbnail {
+        margin: 5px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+    }
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 <script>
-    // jQuery burda
     $(document).ready(function () {
-        $("#uploadButton").click(function () {
-            const fileInput = $("#imageInput")[0];
-            const file = fileInput.files[0];
+        const $uploadButton = $("#uploadButton");
+        const $hairTypeSelect = $("#hairTypeSelect");
+        const $imageInput = $("#imageInput");
+
+        // Fotoğraf seçildiğinde "Fotoğraf Yükle" butonunu etkinleştir
+        $imageInput.on("change", function () {
+            if ($imageInput[0].files.length > 0) {
+                $uploadButton.prop("disabled", false); // Butonu etkinleştir
+            } else {
+                $uploadButton.prop("disabled", true); // Butonu devre dışı bırak
+            }
+        });
+
+        // Fotoğraf yükleme butonuna tıklama işlemi
+        $uploadButton.click(function () {
+            const file = $imageInput[0].files[0];
             if (!file) {
                 alert("Lütfen bir fotoğraf seçin!");
                 return;
-            }""
+            }
 
+            // Rastgele bir model seç
             const options = ["101", "201", "301", "401", "501", "601", "701", "801", "901", "1001", "1101", "1201", "1301"];
             const randomOption = options[Math.floor(Math.random() * options.length)];
+
+            // Öneriyi dropdown'da göster
+            $("#hairTypeSelect").val(randomOption);
 
             const data = new FormData();
             data.append("image_target", file);
             data.append("hair_type", randomOption);
 
+            // Yükleniyor göstergesini aç
+            $("#loadingIndicator").show();
+
+            // API çağrısı
             $.ajax({
                 url: "https://hairstyle-changer.p.rapidapi.com/huoshan/facebody/hairstyle",
                 method: "POST",
@@ -48,21 +162,84 @@
                 contentType: false,
                 data: data,
                 success: function (response) {
-                    const base64Image = response.data.image;
-                    const imgElement = document.createElement("img");
-                    imgElement.src = `data:image/jpeg;base64,${base64Image}`;
-                    imgElement.className = "img-thumbnail";
-                    imgElement.style.width = "100%";
-                    imgElement.style.height = "auto";
-                    imgElement.style.marginTop = "20px";
-                    $("#uploadedImage").html(imgElement);
+                    if (response && response.data && response.data.image) {
+                        const base64Image = response.data.image;
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `data:image/jpeg;base64,${base64Image}`;
+                        imgElement.className = "img-thumbnail";
+                        imgElement.style.width = "100%";
+
+                        // Görseli göster
+                        $("#uploadedImage").html(imgElement);
+                        alert(`Otomatik önerilen saç modeli uygulandı: ${randomOption}`);
+                    } else {
+                        alert("Beklenmeyen bir yanıt alındı.");
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-                    console.error("Error:", status, error);
+                    console.error("Hata detayları:", status, error);
                 },
+                complete: function () {
+                    $("#loadingIndicator").hide();
+                }
+            });
+        });
+
+        // Kullanıcı dropdown'dan model seçtiğinde farklı bir model uygular
+        $hairTypeSelect.change(function () {
+            const fileInput = $imageInput[0];
+            const file = fileInput.files[0];
+            const selectedHairType = $(this).val();
+
+            if (!file) {
+                alert("Lütfen bir fotoğraf seçin!");
+                return;
+            }
+
+            const data = new FormData();
+            data.append("image_target", file);
+            data.append("hair_type", selectedHairType);
+
+            // Yükleniyor göstergesini aç
+            $("#loadingIndicator").show();
+
+            // API çağrısı
+            $.ajax({
+                url: "https://hairstyle-changer.p.rapidapi.com/huoshan/facebody/hairstyle",
+                method: "POST",
+                headers: {
+                    'x-rapidapi-key': '0a950a7270msh2e9b070d9ba062bp1c6142jsn58d3d11b44e8',
+                    'x-rapidapi-host': 'hairstyle-changer.p.rapidapi.com',
+                },
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (response) {
+                    if (response && response.data && response.data.image) {
+                        const base64Image = response.data.image;
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `data:image/jpeg;base64,${base64Image}`;
+                        imgElement.className = "img-thumbnail";
+                        imgElement.style.width = "100%";
+
+                        // Görseli göster
+                        $("#uploadedImage").html(imgElement);
+                        alert(`Seçilen saç modeli uygulandı: ${selectedHairType}`);
+                    } else {
+                        alert("Beklenmeyen bir yanıt alındı.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+                    console.error("Hata detayları:", status, error);
+                },
+                complete: function () {
+                    $("#loadingIndicator").hide();
+                }
             });
         });
     });
+
+
 </script>
-@* bu sayfa şifre Se542671% *@
